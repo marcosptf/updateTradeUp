@@ -62,7 +62,7 @@ public class UpdateTradeUp extends iConfig {
     }
 
     public String parseXmlSend(String xmlMySql) {
-        String xmlSendUpdate, RCUSTOMERID, REMAIL, RFIRSTNAME, RLASTNAME,
+        String RCUSTOMERID, REMAIL, RFIRSTNAME, RLASTNAME,
                 RPASSWORD, RNETSAFEREF, RPARTNERREF, SKU;
 
         RCUSTOMERID = (String) xmlMySql.subSequence(xmlMySql.indexOf("<RCUSTOMERID>") + 13, xmlMySql.lastIndexOf("</RCUSTOMERID>"));
@@ -74,60 +74,25 @@ public class UpdateTradeUp extends iConfig {
         RPARTNERREF = (String) xmlMySql.subSequence(xmlMySql.indexOf("<RPARTNERREF>") + 13, xmlMySql.lastIndexOf("</RPARTNERREF>"));
         SKU = (String) xmlMySql.subSequence(xmlMySql.indexOf("SKU='") + 5, xmlMySql.lastIndexOf("' QTY"));
         RPARTNERREF = (String) RPARTNERREF.subSequence(0,(RPARTNERREF.length()-3));
+        this.resp = REMAIL;
+        return this.config.xmlSendUpdate(RCUSTOMERID,REMAIL,RFIRSTNAME,RLASTNAME,RPASSWORD,RNETSAFEREF,RPARTNERREF,SKU);
 
-        xmlSendUpdate = "<SOAP:Envelope xmlns:SOAP=\"http://schemas.xmlsoap.org/soap/envelope/\">\n"
-                + "    <SOAP:Header/>\n"
-                + "    <SOAP:Body>\n"
-                + "        <m:NSorder xmlns:m=\"urn:soapserver/soap:AuthorizationModule\">\n"
-                + "            <HEADER>\n"
-                + "                <RPARTNERID>NETBR55</RPARTNERID>\n"
-                + "            </HEADER>\n"
-                + "            <DATA>\n"
-                + "                <CUSTOMER>\n"
-                + "                    <RCUSTOMERID>" + RCUSTOMERID + "</RCUSTOMERID>\n"
-                + "                    <RREQUESTTYPE>UPDATE</RREQUESTTYPE>\n"
-                + "                    <REMAIL>" + REMAIL + "</REMAIL>\n"
-                + "                    <RFIRSTNAME>" + RFIRSTNAME + "</RFIRSTNAME>\n"
-                + "                    <RLASTNAME>" + RLASTNAME + "</RLASTNAME>\n"
-                + "                    <RPASSWORD>" + RPASSWORD + "</RPASSWORD>\n"
-                + "                    <RLANGUAGE>pt-br</RLANGUAGE>\n"
-                + "                </CUSTOMER>\n"
-                + "                <ORDER>\n"
-                + "                    <RNETSAFEREF>" + RNETSAFEREF + "</RNETSAFEREF>\n"
-                + "                    <RPARTNERREF>" + RPARTNERREF + "</RPARTNERREF>\n"
-                + "                    <ITEM>\n"
-                + "                        <RSKU SKU='" + SKU + "' QTY='3' />\n"
-                + "                    </ITEM>\n"
-                + "                </ORDER>\n"
-                + "            </DATA>\n"
-                + "        </m:NSorder>\n"
-                + "    </SOAP:Body>\n"
-                + "</SOAP:Envelope> ";
-                this.resp = REMAIL;
-        return xmlSendUpdate;
     }
 
     public String post(String param) throws UnsupportedEncodingException, IOException {
 
         HttpClient httpclient = HttpClients.createDefault();
         HttpPost httppost = new HttpPost(this.config.getEndpoint());
-
-        // Request parameters and other properties.
         List<NameValuePair> params;
         params = new ArrayList<>(2);
         params.add(new BasicNameValuePair("xml", param));
-//        params.add(new BasicNameValuePair("param-2", "Hello!"));
         httppost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
-
-        //Execute and get the response.
         HttpResponse response = httpclient.execute(httppost);
         HttpEntity entity = response.getEntity();
 
         if (entity != null) {
             InputStream instream = entity.getContent();
             try {
-                // do something useful
-//                this.resp = instream.toString()+response.getStatusLine().toString();
                 this.resp = entity.getContent().toString();
             } finally {
                 instream.close();
@@ -137,13 +102,12 @@ public class UpdateTradeUp extends iConfig {
     }
 
     public String soapPost(String reqXML) throws MalformedURLException, IOException {
-        URL oURL = new URL("https://oi.centrodeseguranca.com.br/nswebservice/LibMdvV2/ns_registration_mdv01.asp");
+        URL oURL = new URL(config.getEndpoint());
         HttpURLConnection con = (HttpURLConnection) oURL.openConnection();
         con.setDoOutput(true);
-        con.setRequestMethod("POST");
-        con.setRequestProperty("Content-type", "text/xml; charset=utf-8");
-        con.setRequestProperty("SOAPAction", "https://oi.centrodeseguranca.com.br/nswebservice/LibMdvV2/ns_registration_mdv01.asp");
-
+        con.setRequestMethod(config.getMethod());
+        con.setRequestProperty(config.getRequestContent(), config.getRequestCharset());
+        con.setRequestProperty(config.getRequestSoap(), config.getEndpoint());
         OutputStream reqStream = con.getOutputStream();
         reqStream.write(reqXML.getBytes());
         InputStream resStream = con.getInputStream();
@@ -161,11 +125,10 @@ public class UpdateTradeUp extends iConfig {
             Logger.getLogger(UpdateTradeUp.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            this.rs = this.stmt.executeQuery("select id,replace(xmlsend,'\"\"',\"'\") as xmlsend from test.xmlsend where xmlsent='0' order by id asc;");
-//            rs.next();
+            this.rs = this.stmt.executeQuery(config.getRequestXmlToPost());
             while (this.rs.next()) {
                 this.resp = this.soapPost(this.parseXmlSend(this.rs.getString("xmlsend")));
-                this.stmt.executeUpdate("update test.xmlsend set xmlsent='1' where id='" + this.rs.getString("id") + "';");
+                this.stmt.executeUpdate(config.getResponseXmlSent() + this.rs.getString("id") + "';");
             }
         } catch (SQLException e) {
             e.getMessage();
