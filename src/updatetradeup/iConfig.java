@@ -39,7 +39,7 @@ public class iConfig {
         this.tplTitle = "";
         this.driver = "com.mysql.jdbc.Driver";
         this.jdbc = "jdbc:mysql://localhost/test";
-        this.endpoint = "https://oi.centrodeseguranca.com.br/nswebservice/LibMdvV2/ns_registration_mdv01.asp";
+        this.endpoint = "https://search.yahoo.com/";
         this.method = "POST";
         this.requestContent = "Content-type";
         this.requestCharset = "text/xml; charset=utf-8";
