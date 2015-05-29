@@ -23,7 +23,7 @@ public class JavaNet {
     public String javaNetRequest() throws MalformedURLException, IOException{
         this.resp = "js=>0";
         
-        URL url  = new URL("https://oi.centrodeseguranca.com.br/nswebservice/LibMdvV2/ns_registration_mdv01.asp");
+        URL url  = new URL("https://search.yahoo.com/");
         this.resp = "js=>1";
         URLConnection urlconn = url.openConnection();
         
