@@ -125,9 +125,7 @@ public class UpdateTradeUp extends iConfig {
         } catch (SQLException ex) {
             Logger.getLogger(UpdateTradeUp.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-//        return " 0=>"+config.getMethod()+" 1=>"+config.getRequestContent()+" 2=>"+config.getRequestCharset()+" 3=>"+config.getRequestSoap()+" 4=>"+config.getEndpoint();
-        
+
         try {
             this.rs = this.stmt.executeQuery(config.getRequestXmlToPost());
             while (this.rs.next()) {
