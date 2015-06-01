@@ -20,7 +20,6 @@ public class JavaPost {
     
     public String post() throws IOException{
         URL url = new URL("http://search.yahoo.com/");
-//        URL url = new URL("https://oi.centrodeseguranca.com.br/nswebservice/LibMdvV2/ns_registration_mdv01.asp");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setDoOutput(true);
         connection.setInstanceFollowRedirects(false);
