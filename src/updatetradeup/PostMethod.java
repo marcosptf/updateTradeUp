@@ -57,7 +57,7 @@ public class PostMethod  extends iConfig{
         return this.resp;
     }
 
-    public static void main(String[] args) throws UnsupportedEncodingException, IOException {
+    public  void main(String[] args) throws UnsupportedEncodingException, IOException {
         
         PostMethod post = new PostMethod();
         post.post();
