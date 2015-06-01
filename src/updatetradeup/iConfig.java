@@ -39,12 +39,12 @@ public class iConfig {
         this.tplTitle = "";
         this.driver = "com.mysql.jdbc.Driver";
         this.jdbc = "jdbc:mysql://localhost/test";
-        this.endpoint = "https://oi.centrodeseguranca.com.br/nswebservice/LibMdvV2/ns_registration_mdv01.asp";
+        this.endpoint = "http://oi.centrodeseguranca.com.br/nswebservice/LibMdvV2/ns_registration_mdv01.asp";
         this.method = "POST";
         this.requestContent = "Content-type";
         this.requestCharset = "text/xml; charset=utf-8";
         this.soap = "SOAPAction";
-        this.requestXmlToPost = "\"select id,replace(xmlsend,'\\\"\\\"',\\\"'\\\") as xmlsend from test.xmlsend where xmlsent='0' order by id asc;\"";
+        this.requestXmlToPost = "select id,replace(xmlsend,'\"\"',\"'\") as xmlsend from test.xmlsend where xmlsent='0' order by id asc;";
         this.responseXmlSent = "update test.xmlsend set xmlsent='1' where id='";
 
     }
@@ -91,7 +91,7 @@ public class iConfig {
     }
 
     public String getRequestSoap() {
-        return this.requestCharset;
+        return this.soap;
     }
 
     public String getRequestCharset() {
