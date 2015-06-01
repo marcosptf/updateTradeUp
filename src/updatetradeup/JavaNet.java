@@ -37,7 +37,7 @@ public class JavaNet {
         return this.resp;
     }
     
-    public static void main(String[] args) throws MalformedURLException, IOException{
+    public void main(String[] args) throws MalformedURLException, IOException{
         JavaNet jn = new JavaNet();
         System.out.println("resp post using java.net.URL==>"+jn.javaNetRequest());
         System.out.println(jn.resp);
