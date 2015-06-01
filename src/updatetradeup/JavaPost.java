@@ -32,7 +32,7 @@ public class JavaPost {
 //        return "";
     }
     
-    public static void main(String[] args) throws IOException{
+    public  void main(String[] args) throws IOException{
         JavaPost jp = new JavaPost();
         System.out.println("resp===>");
         System.out.println(jp.post());
