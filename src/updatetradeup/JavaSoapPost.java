@@ -41,7 +41,7 @@ public class JavaSoapPost {
         return resStream.toString();
     }
 
-    public static void main(String[] args) throws MalformedURLException, IOException {
+    public  void main(String[] args) throws MalformedURLException, IOException {
         JavaSoapPost soap = new JavaSoapPost();
         System.out.println(soap.soapPost());
     }
