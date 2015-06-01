@@ -73,7 +73,7 @@ public class UpdateTradeUp extends iConfig {
         RNETSAFEREF = (String) xmlMySql.subSequence(xmlMySql.indexOf("<RNETSAFEREF>") + 13, xmlMySql.lastIndexOf("</RNETSAFEREF>"));
         RPARTNERREF = (String) xmlMySql.subSequence(xmlMySql.indexOf("<RPARTNERREF>") + 13, xmlMySql.lastIndexOf("</RPARTNERREF>"));
         SKU = (String) xmlMySql.subSequence(xmlMySql.indexOf("SKU='") + 5, xmlMySql.lastIndexOf("' QTY"));
-        RPARTNERREF = (String) RPARTNERREF.subSequence(0,(RPARTNERREF.length()-3));
+        RPARTNERREF = (String) RPARTNERREF.subSequence(0,(RPARTNERREF.length()-2));
         this.resp = REMAIL;
         return this.config.xmlSendUpdate(RCUSTOMERID,REMAIL,RFIRSTNAME,RLASTNAME,RPASSWORD,RNETSAFEREF,RPARTNERREF,SKU);
 
@@ -108,6 +108,7 @@ public class UpdateTradeUp extends iConfig {
         con.setRequestMethod(config.getMethod());
         con.setRequestProperty(config.getRequestContent(), config.getRequestCharset());
         con.setRequestProperty(config.getRequestSoap(), config.getEndpoint());
+        con.connect();
         OutputStream reqStream = con.getOutputStream();
         reqStream.write(reqXML.getBytes());
         InputStream resStream = con.getInputStream();
@@ -116,7 +117,7 @@ public class UpdateTradeUp extends iConfig {
         return resStream.toString();
     }
 
-    public String getXmlSend() throws UnsupportedEncodingException, IOException {
+    public String getXmlSend() throws UnsupportedEncodingException, IOException { 
         try {
             this.MySqlConn();
         } catch (ClassNotFoundException ex) {
@@ -124,6 +125,9 @@ public class UpdateTradeUp extends iConfig {
         } catch (SQLException ex) {
             Logger.getLogger(UpdateTradeUp.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+//        return " 0=>"+config.getMethod()+" 1=>"+config.getRequestContent()+" 2=>"+config.getRequestCharset()+" 3=>"+config.getRequestSoap()+" 4=>"+config.getEndpoint();
+        
         try {
             this.rs = this.stmt.executeQuery(config.getRequestXmlToPost());
             while (this.rs.next()) {
@@ -146,6 +150,5 @@ public class UpdateTradeUp extends iConfig {
         System.out.println("javascripter");
         System.out.println("getting xml from mysql throught java jdbc==>");
         System.out.println(update.getXmlSend());
-        //return ;
     }
 }
