@@ -55,7 +55,7 @@ public class ParseXmlSend {
         return xmlSendUpdate;
     }
 
-    public static void main(String[] args) {
+    public  void main(String[] args) {
         ParseXmlSend xml = new ParseXmlSend();
         System.out.println(xml.parseXml());
         
